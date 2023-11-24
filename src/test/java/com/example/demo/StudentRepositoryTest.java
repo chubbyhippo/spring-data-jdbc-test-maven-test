@@ -38,7 +38,7 @@ class StudentRepositoryTest {
 
     @Test
     void shouldGetStudents() {
-        int hippo = studentRepository.findStudentByFirstname("Hippo").size();
+        var hippo = studentRepository.findStudentByFirstname("Hippo").size();
         assertThat(hippo).isEqualTo(2);
     }
 
