@@ -1,27 +1,29 @@
 package com.example.demo;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJdbcTest
 class StudentRepositoryTest {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcClient jdbcClient;
 
     @Autowired
     private StudentRepository studentRepository;
 
     @BeforeEach
     void setup() {
-        jdbcTemplate.execute("drop table student if exists ");
-        jdbcTemplate.execute("""
-                create table student(id serial, firstname varchar(255), lastname varchar(255))
-                """);
+
+        jdbcClient.sql("drop table student if exists ")
+                .update();
+        jdbcClient.sql("create table student(id serial, firstname varchar(255), lastname varchar(255))")
+                .update();
 
         studentRepository.save(Student.builder()
                 .firstname("Hippo")
@@ -37,7 +39,7 @@ class StudentRepositoryTest {
     @Test
     void shouldGetStudents() {
         int hippo = studentRepository.findStudentByFirstname("Hippo").size();
-        Assertions.assertThat(hippo).isEqualTo(2);
+        assertThat(hippo).isEqualTo(2);
     }
 
 }
