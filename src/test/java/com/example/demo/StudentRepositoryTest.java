@@ -20,7 +20,7 @@ class StudentRepositoryTest {
     @BeforeEach
     void setup() {
 
-        jdbcClient.sql("drop table student if exists ")
+        jdbcClient.sql("drop table student if exists")
                 .update();
         jdbcClient.sql("create table student(id serial, firstname varchar(255), lastname varchar(255))")
                 .update();
